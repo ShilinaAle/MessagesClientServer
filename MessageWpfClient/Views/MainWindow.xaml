@@ -5,9 +5,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessageWpfClient"
+        xmlns:vm="clr-namespace:MessageWpfClient.ViewModels"
         mc:Ignorable="d"
         Title="Messages" MinHeight="500" MinWidth="500"
         SizeToContent="WidthAndHeight">
+    <Window.DataContext>
+        <vm:ViewModel/>
+    </Window.DataContext>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.55*"></RowDefinition>
@@ -22,7 +27,7 @@
         </Grid.ColumnDefinitions>
         <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="10" materialDesign:HintAssist.Hint="Введите текст сообщения"
                  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Cursor="Arrow" ></TextBox>
-        <Button x:Name="send" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Grid.Column="0" Grid.Row="1">Отправить</Button>
+        <Button x:Name="send" Command="{Binding SendCommand }" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Grid.Column="0" Grid.Row="1" Cursor="Hand">Отправить</Button>
         <CheckBox x:Name="filterDate" IsChecked="False" Height="30" Grid.Column="0" Grid.Row="2" 
                   VerticalAlignment="Center" Margin="10">Фильтрация</CheckBox>
         <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Margin="10,0">Начальная дата:</TextBlock>
