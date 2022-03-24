@@ -44,7 +44,7 @@ using System.Linq;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "salam maleykum ");
+app.MapGet("/", () => "server is running");
 
 app.MapGet("/GetAllMessages", () =>
 {
