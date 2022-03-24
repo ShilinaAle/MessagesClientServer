@@ -1,0 +1,44 @@
+﻿<Window x:Class="MessageWpfClient.MainWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MessageWpfClient"
+        mc:Ignorable="d"
+        Title="Messages" MinHeight="500" MinWidth="500"
+        SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.55*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="10" materialDesign:HintAssist.Hint="Введите текст сообщения"
+                 Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Cursor="Arrow" ></TextBox>
+        <Button x:Name="send" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Grid.Column="0" Grid.Row="1">Отправить</Button>
+        <CheckBox x:Name="filterDate" IsChecked="False" Height="30" Grid.Column="0" Grid.Row="2" 
+                  VerticalAlignment="Center" Margin="10">Фильтрация</CheckBox>
+        <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Margin="10">Начальная дата:</TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" Margin="10">Конечная дата:</TextBlock>
+        <DatePicker x:Name="startDate" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10"></DatePicker>
+        <DatePicker x:Name="stopDate" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" Margin="10"></DatePicker>
+
+        <ListView x:Name="listView" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Пользователь"/>
+                    <GridViewColumn Header="Дата"/>
+                    <GridViewColumn Header="Сообщение"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>
