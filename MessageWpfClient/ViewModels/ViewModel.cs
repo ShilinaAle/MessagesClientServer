@@ -103,9 +103,7 @@ namespace MessageWpfClient.ViewModels
         {
             try
             {
-                //Message mes = new Message { MessageId = DateTime.Now.ToString(), Text = TextOfMessage, UserId = _guid };
-                DateTime m = new DateTime(2022, 2, 21);
-                Message mes = new Message { MessageId = m.ToString(), Text = TextOfMessage, UserId = _guid };
+                Message mes = new Message { MessageId = DateTime.Now.ToString(), Text = TextOfMessage, UserId = _guid };
                 await PostMessageAsync(mes);
                 MessageList.Clear();
                 GetAsync().GetAwaiter();
