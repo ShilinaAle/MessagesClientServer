@@ -51,9 +51,12 @@ namespace MessageWpfClient.ViewModels
             {
                 MessageList.Clear();
                 List<Message> listOfMessages = await GetMessagesAsync("/GetAllMessages");
-                foreach(var i in listOfMessages)
+                if (listOfMessages != null)
                 {
-                    MessageList.Add(i);
+                    foreach (var i in listOfMessages)
+                    {
+                        MessageList.Add(i);
+                    }
                 }
             }
             catch (Exception e)
@@ -103,6 +106,7 @@ namespace MessageWpfClient.ViewModels
         {
             try
             {
+                GetAsync().GetAwaiter();
                 Message mes = new Message { MessageId = DateTime.Now.ToString(), Text = TextOfMessage, UserId = _guid };
                 await PostMessageAsync(mes);
                 MessageList.Clear();
