@@ -97,9 +97,9 @@ namespace MessageWpfClient.ViewModels
 
         private bool CanSendExecute(object parameter)
         {
-            //if (_canSend == false)
-            //    return false;
-            return true;
+            if (TextOfMessage != null && TextOfMessage.Length > 0)
+                return true;
+            return false;
         }
 
         public string TextOfMessage
