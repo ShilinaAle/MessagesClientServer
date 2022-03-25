@@ -24,8 +24,9 @@ namespace MessageWpfClient.ViewModels
         string _textOfMessage;
         static Guid _guid = Guid.NewGuid();
         DateTime _startDate;
-        DateTime _startDefaultDate;
-        DateTime _endDate;  
+        DateTime _endDate;
+        bool _isCheckedFilter;
+        
         public ViewModel()
         {
             MessageList = new ObservableCollection<Message>();
@@ -48,6 +49,7 @@ namespace MessageWpfClient.ViewModels
         {
             try
             {
+                MessageList.Clear();
                 List<Message> listOfMessages = await GetMessagesAsync("/GetAllMessages");
                 foreach(var i in listOfMessages)
                 {
@@ -101,7 +103,9 @@ namespace MessageWpfClient.ViewModels
         {
             try
             {
-                Message mes = new Message { MessageId = DateTime.Now.ToString(), Text = TextOfMessage, UserId = _guid };
+                //Message mes = new Message { MessageId = DateTime.Now.ToString(), Text = TextOfMessage, UserId = _guid };
+                DateTime m = new DateTime(2022, 2, 21);
+                Message mes = new Message { MessageId = m.ToString(), Text = TextOfMessage, UserId = _guid };
                 await PostMessageAsync(mes);
                 MessageList.Clear();
                 GetAsync().GetAwaiter();
@@ -142,21 +146,26 @@ namespace MessageWpfClient.ViewModels
         private bool CanFilterExecute(object parameter)
         {
             //TODO
-            //if (TextOfMessage != null && TextOfMessage.Length > 0)
-                return true;
-            //return false;
+            if (EndDate == DateTime.MinValue || StartDate == DateTime.MinValue)
+                return false;
+            return true;
         }
 
         private void FilterMessages()
         {
-            ObservableCollection<Message> newMessageList = new ObservableCollection<Message>();
-            foreach (Message message in MessageList)
+            if (IsCheckedFilter)
             {
-                if (DateTime.Parse(message.MessageId) > StartDate && DateTime.Parse(message.MessageId) < EndDate)
-                    newMessageList.Add(message);
+                ObservableCollection<Message> newMessageList = new ObservableCollection<Message>(MessageList);
+                foreach (Message message in newMessageList)
+                {
+                    if (DateTime.Parse(message.MessageId) < StartDate || DateTime.Parse(message.MessageId) > EndDate)
+                        MessageList.Remove(message);
+                }
             }
-            MessageList = newMessageList;   
-
+            else
+            {
+                GetAsync().GetAwaiter();
+            }
         }
 
         //свойства
@@ -188,15 +197,15 @@ namespace MessageWpfClient.ViewModels
             set { _endDate = value; }
         }
 
-       //DateTime _startDefaultDate
         public DateTime StartDefaultDate
         {
-            get {
-                if (_startDefaultDate == DateTime.MinValue)
-                    _startDefaultDate = DateTime.Now;
-                return _startDefaultDate;
-            }
-            set { _startDate = value; }
+            get { return DateTime.Now; }
+        }
+
+        public bool IsCheckedFilter
+        {
+            get { return _isCheckedFilter; }
+            set { _isCheckedFilter = value; }
         }
     }
 }
