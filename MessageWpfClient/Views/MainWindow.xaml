@@ -27,12 +27,12 @@
         <TextBox Text="{Binding TextOfMessage}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="10" materialDesign:HintAssist.Hint="Введите текст сообщения"
                  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Cursor="Arrow" ></TextBox>
         <Button x:Name="send" Command="{Binding SendCommand }" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Grid.Column="0" Grid.Row="1" Cursor="Hand">Отправить</Button>
-        <CheckBox x:Name="filterDate" IsChecked="False" Height="30" Grid.Column="0" Grid.Row="2" 
+        <CheckBox x:Name="filterDate" Command="{Binding FilterCommand}" IsChecked="False" Height="30" Grid.Column="0" Grid.Row="2" 
                   VerticalAlignment="Center" Margin="10">Фильтрация</CheckBox>
         <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Margin="10,0">Начальная дата:</TextBlock>
         <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" Margin="10,0">Конечная дата:</TextBlock>
-        <DatePicker x:Name="startDate" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
-        <DatePicker x:Name="stopDate" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
+        <DatePicker x:Name="startDate" SelectedDate="{Binding StartDate}" DisplayDate="{Binding StartDefaultDate}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
+        <DatePicker x:Name="endDate" Text="{Binding EndDate}" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
 
         <ListView x:Name="listView" ItemsSource="{Binding MessageList}" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3">
             <ListView.View>

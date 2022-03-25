@@ -20,9 +20,12 @@ namespace MessageWpfClient.ViewModels
         static HttpClient client = new HttpClient();
         ObservableCollection<Message> _messageList;
         ICommand _SendCommand;
-        //bool _canSend = false; //доступность кнопки
+        ICommand _FilterCommand;
         string _textOfMessage;
         static Guid _guid = Guid.NewGuid();
+        DateTime _startDate;
+        DateTime _startDefaultDate;
+        DateTime _endDate;  
         public ViewModel()
         {
             MessageList = new ObservableCollection<Message>();
@@ -33,23 +36,14 @@ namespace MessageWpfClient.ViewModels
             GetAsync().GetAwaiter();
         }
 
-        public ObservableCollection<Message> MessageList
-        {
-            get { return _messageList; }
-            set
-            {
-                _messageList = value;
-                OnPropertyChanged();
-            }
-        }
-
-
+        //обновление списка
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        //получение данных с сервера
         async Task GetAsync()
         {
             try
@@ -102,12 +96,7 @@ namespace MessageWpfClient.ViewModels
             return false;
         }
 
-        public string TextOfMessage
-        {
-            get { return _textOfMessage; }
-            set { _textOfMessage = value; }
-        }
-
+        //отправка данных на сервер
         private async Task PostAsync()
         {
             try
@@ -130,6 +119,84 @@ namespace MessageWpfClient.ViewModels
             HttpResponseMessage response = await client.PostAsJsonAsync(
                 "/SaveMessage", mes);
             response.EnsureSuccessStatusCode();
+        }
+
+        //фильтрация
+        public ICommand FilterCommand
+        {
+            get
+            {
+                if (_FilterCommand == null)
+                {
+                    _FilterCommand = new MyCommand(FilterExecute, CanFilterExecute);
+                }
+                return _FilterCommand;
+            }
+        }
+
+        private void FilterExecute(object parameter)
+        {
+            FilterMessages();
+        }
+
+        private bool CanFilterExecute(object parameter)
+        {
+            //TODO
+            //if (TextOfMessage != null && TextOfMessage.Length > 0)
+                return true;
+            //return false;
+        }
+
+        private void FilterMessages()
+        {
+            ObservableCollection<Message> newMessageList = new ObservableCollection<Message>();
+            foreach (Message message in MessageList)
+            {
+                if (DateTime.Parse(message.MessageId) > StartDate && DateTime.Parse(message.MessageId) < EndDate)
+                    newMessageList.Add(message);
+            }
+            MessageList = newMessageList;   
+
+        }
+
+        //свойства
+        public ObservableCollection<Message> MessageList
+        {
+            get { return _messageList; }
+            set
+            {
+                _messageList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string TextOfMessage
+        {
+            get { return _textOfMessage; }
+            set { _textOfMessage = value; }
+        }
+
+        public DateTime StartDate
+        {
+            get { return _startDate; }
+            set { _startDate = value; }
+        }
+
+        public DateTime EndDate
+        {
+            get { return _endDate; }
+            set { _endDate = value; }
+        }
+
+       //DateTime _startDefaultDate
+        public DateTime StartDefaultDate
+        {
+            get {
+                if (_startDefaultDate == DateTime.MinValue)
+                    _startDefaultDate = DateTime.Now;
+                return _startDefaultDate;
+            }
+            set { _startDate = value; }
         }
     }
 }
