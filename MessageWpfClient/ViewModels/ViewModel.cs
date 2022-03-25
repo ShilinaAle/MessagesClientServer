@@ -111,7 +111,6 @@ namespace MessageWpfClient.ViewModels
                 await PostMessageAsync(mes);
                 MessageList.Clear();
                 GetAsync().GetAwaiter();
-                MessageBox.Show("Добавление прошло успешно");
             }
             catch (Exception e)
             {
@@ -147,7 +146,6 @@ namespace MessageWpfClient.ViewModels
 
         private bool CanFilterExecute(object parameter)
         {
-            //TODO
             if (EndDate == DateTime.MinValue || StartDate == DateTime.MinValue)
                 return false;
             return true;
@@ -184,19 +182,40 @@ namespace MessageWpfClient.ViewModels
         public string TextOfMessage
         {
             get { return _textOfMessage; }
-            set { _textOfMessage = value; }
+            set
+            {
+                _textOfMessage = value;
+                OnPropertyChanged();
+            }
         }
 
         public DateTime StartDate
         {
-            get { return _startDate; }
-            set { _startDate = value; }
+            get
+            {
+                if (_startDate == DateTime.MinValue)
+                    _startDate = DateTime.Now;
+                return _startDate;
+            }
+            set
+            {
+                _startDate = value;
+            }
         }
 
         public DateTime EndDate
         {
-            get { return _endDate; }
-            set { _endDate = value; }
+            get
+            {
+                if (_endDate == DateTime.MinValue)
+                    _endDate = DateTime.Now.AddDays(1);
+                return _endDate;
+            }
+            set
+            {
+                _endDate = value;
+            }
+
         }
 
         public DateTime StartDefaultDate

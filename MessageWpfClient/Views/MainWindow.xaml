@@ -26,7 +26,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBox Text="{Binding TextOfMessage}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="10" materialDesign:HintAssist.Hint="Введите текст сообщения"
+        <TextBox Text="{Binding TextOfMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="10" materialDesign:HintAssist.Hint="Введите текст сообщения"
                  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Cursor="Arrow" ></TextBox>
         <Button x:Name="send" Command="{Binding SendCommand }" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Grid.Column="0" Grid.Row="1" Cursor="Hand">Отправить</Button>
         <CheckBox x:Name="filterDate" Command="{Binding FilterCommand}" IsChecked="{Binding IsCheckedFilter}" Height="30" Grid.Column="0" Grid.Row="2" 
