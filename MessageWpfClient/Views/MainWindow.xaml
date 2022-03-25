@@ -34,14 +34,14 @@
 
         <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Margin="10,0">Начальная дата:</TextBlock>
         <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" Margin="10,0">Конечная дата:</TextBlock>
-        <DatePicker x:Name="startDate" SelectedDate="{Binding StartDate}" DisplayDate="{Binding StartDefaultDate, Mode=OneTime}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
-        <DatePicker x:Name="endDate" SelectedDate="{Binding EndDate}" DisplayDate="{Binding StartDefaultDate, Mode=OneTime}" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
+        <DatePicker x:Name="startDate" SelectedDate="{Binding StartDate}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
+        <DatePicker x:Name="endDate" SelectedDate="{Binding EndDate}" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0"></DatePicker>
 
         <ListView x:Name="listView" ItemsSource="{Binding MessageList}" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Пользователь" DisplayMemberBinding="{Binding UserId}"/>
-                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding MessageId}"/>
+                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Date}"/>
                     <GridViewColumn Header="Сообщение" DisplayMemberBinding="{Binding Text}"/>
                 </GridView>
             </ListView.View>

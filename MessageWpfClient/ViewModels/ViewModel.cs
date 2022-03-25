@@ -22,7 +22,7 @@ namespace MessageWpfClient.ViewModels
         ICommand _SendCommand;
         ICommand _FilterCommand;
         string _textOfMessage;
-        static Guid _guid = Guid.NewGuid();
+        static Guid _guid = Guid.NewGuid(); //"имя" пользователя
         DateTime _startDate;
         DateTime _endDate;
         bool _isCheckedFilter;
@@ -106,11 +106,11 @@ namespace MessageWpfClient.ViewModels
         {
             try
             {
-                GetAsync().GetAwaiter();
-                Message mes = new Message { MessageId = DateTime.Now.ToString(), Text = TextOfMessage, UserId = _guid };
+                Message mes = new Message { Date = DateTime.Now, Text = TextOfMessage, UserId = _guid };
                 await PostMessageAsync(mes);
                 MessageList.Clear();
                 GetAsync().GetAwaiter();
+                TextOfMessage = "";
             }
             catch (Exception e)
             {
@@ -146,8 +146,6 @@ namespace MessageWpfClient.ViewModels
 
         private bool CanFilterExecute(object parameter)
         {
-            if (EndDate == DateTime.MinValue || StartDate == DateTime.MinValue)
-                return false;
             return true;
         }
 
@@ -158,7 +156,7 @@ namespace MessageWpfClient.ViewModels
                 ObservableCollection<Message> newMessageList = new ObservableCollection<Message>(MessageList);
                 foreach (Message message in newMessageList)
                 {
-                    if (DateTime.Parse(message.MessageId) < StartDate || DateTime.Parse(message.MessageId) > EndDate)
+                    if (message.Date < StartDate || message.Date > EndDate)
                         MessageList.Remove(message);
                 }
             }
@@ -216,11 +214,6 @@ namespace MessageWpfClient.ViewModels
                 _endDate = value;
             }
 
-        }
-
-        public DateTime StartDefaultDate
-        {
-            get { return DateTime.Now; }
         }
 
         public bool IsCheckedFilter
