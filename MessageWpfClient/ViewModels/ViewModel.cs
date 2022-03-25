@@ -18,12 +18,19 @@ namespace MessageWpfClient.ViewModels
     internal class ViewModel
     {
         static HttpClient client = new HttpClient();
-        ObservableCollection<Message> _messageList; //отображаемый лист
+        ObservableCollection<Message> _messageList;
         ICommand _SendCommand;
         //bool _canSend = false; //доступность кнопки
+        string _textOfMessage;
+        static Guid _guid = Guid.NewGuid();
         public ViewModel()
         {
-            _messageList = new ObservableCollection<Message>(); 
+            MessageList = new ObservableCollection<Message>();
+            client.BaseAddress = new Uri("http://localhost:5185/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            GetAsync().GetAwaiter();
         }
 
         public ObservableCollection<Message> MessageList
@@ -36,10 +43,38 @@ namespace MessageWpfClient.ViewModels
             }
         }
 
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        async Task GetAsync()
+        {
+            try
+            {
+                List<Message> listOfMessages = await GetMessagesAsync("/GetAllMessages");
+                foreach(var i in listOfMessages)
+                {
+                    MessageList.Add(i);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Exception in GetAsync: {e.Message}");
+            }
+        }
+
+        async Task<List<Message>> GetMessagesAsync(string path)
+        {
+            List<Message> listOfMessages = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                listOfMessages = await response.Content.ReadAsAsync<List<Message>>();
+            }
+            return listOfMessages;
         }
 
         //кнопка отправки
@@ -67,22 +102,25 @@ namespace MessageWpfClient.ViewModels
             return true;
         }
 
+        public string TextOfMessage
+        {
+            get { return _textOfMessage; }
+            set { _textOfMessage = value; }
+        }
+
         private async Task PostAsync()
         {
-            client.BaseAddress = new Uri("http://localhost:5185/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-
             try
             {
-                Message mes = new Message { MessageId = "12", Text = "2", UserId = new Guid() };
+                Message mes = new Message { MessageId = DateTime.Now.ToString(), Text = TextOfMessage, UserId = _guid };
                 await PostMessageAsync(mes);
+                MessageList.Clear();
+                GetAsync().GetAwaiter();
                 MessageBox.Show("Добавление прошло успешно");
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception in PostAsync");
+                MessageBox.Show($"Exception in PostAsync: {e.Message}");
             }
             Console.ReadLine();
         }
