@@ -5,7 +5,7 @@ using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-var pathJson = "data.json";
+var pathJson = "messagesData.json";
 
 app.MapGet("/", () => "server is running");
 
@@ -13,6 +13,7 @@ app.MapGet("/GetAllMessages", () =>
 {
     var data = File.ReadAllText(pathJson);
     List<Message> messages = JsonConvert.DeserializeObject<List<Message>>(data);
+
     return messages;
 });
 
@@ -27,8 +28,10 @@ app.MapPost("/SaveMessage", ([FromBody] Message newMessage) =>
     }
     else
     {
-        File.WriteAllText(pathJson, JsonConvert.SerializeObject(newMessage));
+        List<Message> newmessages = new List<Message>() { newMessage };
+        File.WriteAllText(pathJson, JsonConvert.SerializeObject(newmessages));
     }
+
     return Results.Ok();
 });
 
